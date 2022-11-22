@@ -19,6 +19,7 @@ type Waithq struct {
 func (*Waithq) Validate(ctx context.Context, in *proto.ValidateRequest) (response *proto.ValidateResponse, err error) {
 	if strings.HasPrefix(in.Token, MOCKVALIDATOR) {
 		response.Valid = true
+		response.Id = strings.TrimPrefix(in.Token, MOCKVALIDATOR)
 	}
 	return
 }
