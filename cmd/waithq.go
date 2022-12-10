@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/CSC354/wathiq/proto"
-	"github.com/CSC354/wathiq/zalh"
 	"github.com/golang-jwt/jwt/v4"
 	"google.golang.org/grpc"
 )
@@ -30,10 +29,11 @@ func (*Waithq) GetToken(ctx context.Context, req *proto.TokenRequest) (response 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(KEY)
 	if err != nil {
-		response.Error = int32(zalh.Zalh_ErrGeneratingToken)
+		response.Error = int32(proto.Zalh_ErrGeneratingToken)
 		return
 	}
 	response.Token = tokenString
+	response.Error = int32(proto.Zalh_Ok)
 	return
 
 }
