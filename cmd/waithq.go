@@ -35,7 +35,6 @@ func (*Waithq) GetToken(ctx context.Context, req *proto.TokenRequest) (response 
 	response.Token = tokenString
 	response.Error = int32(proto.Zalh_Ok)
 	return
-
 }
 
 // Validate implements proto.WathiqServer
