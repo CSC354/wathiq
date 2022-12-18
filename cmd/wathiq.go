@@ -6,7 +6,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/CSC354/wathiq/proto"
+	proto "github.com/CSC354/wathiq/pwathiq"
 	"github.com/golang-jwt/jwt/v4"
 	"google.golang.org/grpc"
 )
@@ -18,6 +18,7 @@ type Waithq struct {
 }
 
 // GetToken implements proto.WathiqServer
+// TODO implement error code
 func (*Waithq) GetToken(ctx context.Context, req *proto.TokenRequest) (response *proto.TokenResponse, err error) {
 	expirationTime := time.Now().Add(60 * 24 * time.Hour)
 	claims := &Claims{
@@ -29,11 +30,12 @@ func (*Waithq) GetToken(ctx context.Context, req *proto.TokenRequest) (response 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(KEY)
 	if err != nil {
-		response.Error = int32(proto.Zalh_ErrGeneratingToken)
+		response.Error = 1
 		return
 	}
+	response = &proto.TokenResponse{}
 	response.Token = tokenString
-	response.Error = int32(proto.Zalh_Ok)
+	response.Error = 0
 	return
 }
 
@@ -48,6 +50,8 @@ func (*Waithq) Validate(ctx context.Context, req *proto.ValidateRequest) (res *p
 		res.Valid = false
 		return
 	}
+
+	res = &proto.ValidateResponse{}
 	res.Valid = true
 	res.Id = claims.Username
 	return
